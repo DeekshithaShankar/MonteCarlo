@@ -9,11 +9,7 @@ UNIT = 100  # pixels
 HEIGHT = 5  # grid height
 WIDTH = 5  # grid width
 
-<<<<<<< HEAD
  # Initialize the base Tk window
-=======
-
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
 class Env(tk.Tk):
     def __init__(self):
         super(Env, self).__init__()
@@ -25,30 +21,19 @@ class Env(tk.Tk):
         self.canvas = self._build_canvas()
         self.texts = []
 
-<<<<<<< HEAD
 #Create a white canvas
-=======
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
     def _build_canvas(self):
         canvas = tk.Canvas(self, bg='white',
                                 height=HEIGHT * UNIT,
                                 width=WIDTH * UNIT)
-<<<<<<< HEAD
         # Draw vertical lines
         for c in range(0, WIDTH * UNIT, UNIT):  # 0~400 by 80
             x0, y0, x1, y1 = c, 0, c, HEIGHT * UNIT
             canvas.create_line(x0, y0, x1, y1) #H Lines
-=======
-        # create grids
-        for c in range(0, WIDTH * UNIT, UNIT):  # 0~400 by 80
-            x0, y0, x1, y1 = c, 0, c, HEIGHT * UNIT
-            canvas.create_line(x0, y0, x1, y1)
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
         for r in range(0, HEIGHT * UNIT, UNIT):  # 0~400 by 80
             x0, y0, x1, y1 = 0, r, HEIGHT * UNIT, r
             canvas.create_line(x0, y0, x1, y1)
 
-<<<<<<< HEAD
         # place agent
         self.rectangle = canvas.create_image(50, 50, image=self.shapes[0])
         #place traps
@@ -58,15 +43,6 @@ class Env(tk.Tk):
         self.circle = canvas.create_image(250, 250, image=self.shapes[2])
 
         # Add canvas to window
-=======
-        # add img to canvas
-        self.rectangle = canvas.create_image(50, 50, image=self.shapes[0])
-        self.triangle1 = canvas.create_image(250, 150, image=self.shapes[1])
-        self.triangle2 = canvas.create_image(150, 250, image=self.shapes[1])
-        self.circle = canvas.create_image(250, 250, image=self.shapes[2])
-
-        # pack all
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
         canvas.pack()
 
         return canvas
@@ -81,10 +57,7 @@ class Env(tk.Tk):
 
         return rectangle, triangle, circle
 
-<<<<<<< HEAD
 #convert pixel to grid coords.
-=======
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
     @staticmethod
     def coords_to_state(coords):
         x = int((coords[0] - 50) / 100)
@@ -92,7 +65,6 @@ class Env(tk.Tk):
         return [x, y]
 
     def reset(self):
-<<<<<<< HEAD
         self.update() #Refresh the window
         time.sleep(0.5)
         x, y = self.canvas.coords(self.rectangle) #current pos
@@ -101,24 +73,11 @@ class Env(tk.Tk):
         return self.coords_to_state(self.canvas.coords(self.rectangle)) #retrn new state
 
 #move the agent & compute reward
-=======
-        self.update()
-        time.sleep(0.5)
-        x, y = self.canvas.coords(self.rectangle)
-        self.canvas.move(self.rectangle, UNIT / 2 - x, UNIT / 2 - y)
-        # return observation
-        return self.coords_to_state(self.canvas.coords(self.rectangle))
-
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
     def step(self, action):
         state = self.canvas.coords(self.rectangle)
         base_action = np.array([0, 0])
         self.render()
-<<<<<<< HEAD
 #checks boundary cndns before movng d,u,l,r
-=======
-
->>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
         if action == 0:  # up
             if state[1] > UNIT:
                 base_action[1] -= UNIT
