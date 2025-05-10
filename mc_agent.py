@@ -1,16 +1,24 @@
 import numpy as np
 import random
 from collections import defaultdict
+<<<<<<< HEAD
 import matplotlib.pyplot as plt
 import seaborn as sns
 from environment import Env
 
 #Here we initialize everything the agent needs to learn and interact with the environment.
+=======
+from environment import Env
+
+
+# Monte Carlo Agent which learns every episodes from the sample
+>>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
 class MCAgent:
     def __init__(self, actions):
         self.width = 5
         self.height = 5
         self.actions = actions
+<<<<<<< HEAD
         self.learning_rate = 0.05  # Increased for faster learning
         self.discount_factor = 0.95  # More future-focused
         self.epsilon = 0.2  # More exploration initially
@@ -34,12 +42,31 @@ class MCAgent:
         for reward in reversed(self.samples):
             state = str(reward[0])
             total_reward += reward[1]
+=======
+        self.learning_rate = 0.01
+        self.discount_factor = 0.9
+        self.epsilon = 0.1
+        self.samples = []
+        self.value_table = defaultdict(float)
+
+    # append sample to memory(state, reward, done)
+    def save_sample(self, state, reward, done):
+        self.samples.append([state, reward, done])
+
+    # for every episode, agent updates q function of visited states
+    def update(self):
+        G_t = 0
+        visit_state = []
+        for reward in reversed(self.samples):
+            state = str(reward[0])
+>>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
             if state not in visit_state:
                 visit_state.append(state)
                 G_t = self.discount_factor * (reward[1] + G_t)
                 value = self.value_table[state]
                 self.value_table[state] = (value +
                                            self.learning_rate * (G_t - value))
+<<<<<<< HEAD
         self.episode_rewards.append(total_reward) #store total reward
         self.samples.clear() #clear mem
 
@@ -55,6 +82,22 @@ class MCAgent:
         return int(self.arg_max(next_state)) #Best action
 
 #Tie-Max
+=======
+
+    # get action for the state according to the q function table
+    # agent pick action of epsilon-greedy policy
+    def get_action(self, state):
+        if np.random.rand() < self.epsilon:
+            # take random action
+            action = np.random.choice(self.actions)
+        else:
+            # take action according to the q function table
+            next_state = self.possible_next_state(state)
+            action = self.arg_max(next_state)
+        return int(action)
+
+    # compute arg_max if multiple candidates exit, pick one randomly
+>>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
     @staticmethod
     def arg_max(next_state):
         max_index_list = []
@@ -68,10 +111,18 @@ class MCAgent:
                 max_index_list.append(index)
         return random.choice(max_index_list)
 
+<<<<<<< HEAD
 #Simulate next state values - 4
     def possible_next_state(self, state):
         col, row = state
         next_state = [0.0] * 4
+=======
+    # get the possible next states
+    def possible_next_state(self, state):
+        col, row = state
+        next_state = [0.0] * 4
+
+>>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
         if row != 0:
             next_state[0] = self.value_table[str([col, row - 1])]
         else:
@@ -88,6 +139,7 @@ class MCAgent:
             next_state[3] = self.value_table[str([col + 1, row])]
         else:
             next_state[3] = self.value_table[str(state)]
+<<<<<<< HEAD
         return next_state
 
 #Visualise heat map
@@ -133,6 +185,13 @@ class MCAgent:
 
 
 #Start env-agent
+=======
+
+        return next_state
+
+
+# main loop
+>>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
 if __name__ == "__main__":
     env = Env()
     agent = MCAgent(actions=list(range(env.n_actions)))
@@ -140,6 +199,7 @@ if __name__ == "__main__":
     for episode in range(1000):
         state = env.reset()
         action = agent.get_action(state)
+<<<<<<< HEAD
 #Save evtg untl eps ends.
         while True:
             next_state, reward, done = env.step(action)
@@ -158,3 +218,22 @@ if __name__ == "__main__":
     print(f"\nTotal Success: {agent.success_count}, Failures: {agent.failure_count}")
     agent.render_episode_rewards()
     agent.render_value_heatmap(goal=[3, 2], trap=[2, 2])
+=======
+
+        while True:
+            env.render()
+
+            # forward to next state. reward is number and done is boolean
+            next_state, reward, done = env.step(action)
+            agent.save_sample(next_state, reward, done)
+
+            # get next action
+            action = agent.get_action(next_state)
+
+            # at the end of each episode, update the q function table
+            if done:
+                print("episode : ", episode)
+                agent.update()
+                agent.samples.clear()
+                break
+>>>>>>> 7ccde2cb41eb67246ea9ce32ad9a5eb8f37428c7
